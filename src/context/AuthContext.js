@@ -14,6 +14,8 @@ const recuder = (state, action) => {
       return {...state, token: action.payload, errorMessage: ''};
     case 'clear_error_mess':
       return {...state, errorMessage: ''};
+    case 'signout':
+      return {token: null, errorMessage: ''};
     default:
       return state;
   }
@@ -69,7 +71,11 @@ const signup = dispatch => {
 };
 
 const signout = dispatch => {
-  return () => {};
+  return async () => {
+    await AsyncStorage.removeItem('token');
+    dispatch({type: 'signout'});
+    navigate('loginFlow');
+  };
 };
 
 export const {Context, Provider} = createDataContext(
